@@ -12,6 +12,7 @@ extern crate num_traits;
 use libc::size_t;
 
 pub mod alloc;
+pub mod block;
 pub mod error;
 pub mod native_types;
 pub mod raw;

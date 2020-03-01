@@ -8,6 +8,7 @@ pub enum RedisError {
     WrongArity,
     Str(&'static str),
     String(String),
+    Block,
 }
 
 impl RedisError {
@@ -58,6 +59,7 @@ impl fmt::Display for RedisError {
             RedisError::WrongArity => "Wrong Arity",
             RedisError::Str(s) => s,
             RedisError::String(s) => s.as_str(),
+            RedisError::Block => "Block"
         };
 
         write!(f, "{}", d)

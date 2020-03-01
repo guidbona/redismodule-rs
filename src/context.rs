@@ -10,7 +10,7 @@ use crate::{RedisError, RedisResult, RedisString, RedisValue};
 /// Redis is a structure that's designed to give us a high-level interface to
 /// the Redis module API by abstracting away the raw C FFI calls.
 pub struct Context {
-    ctx: *mut raw::RedisModuleCtx,
+    pub (crate) ctx: *mut raw::RedisModuleCtx,
 }
 
 impl Context {
@@ -162,6 +162,11 @@ impl Context {
                 let msg = CString::new(s).unwrap();
                 raw::RedisModule_ReplyWithError.unwrap()(self.ctx, msg.as_ptr()).into()
             },
+
+            Err(RedisError::Block) => {
+                self.log(LogLevel::Warning, "Must not reply with RedisError::Block!!!");
+                raw::Status::Err
+            }
         }
     }
 

@@ -27,7 +27,10 @@ macro_rules! redis_command {
                 .map(|args| $command_handler(&context, args))
                 .unwrap_or_else(|e| Err(e));
 
-            context.reply(response) as c_int
+            match response {
+                Err(RedisError::Block) => 0 as c_int,
+                _ => context.reply(response) as c_int,
+            }
         }
         /////////////////////
 
